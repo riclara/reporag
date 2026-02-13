@@ -1,0 +1,44 @@
+{
+  "name": "reporag",
+  "private": true,
+  "version": "0.1.0",
+  "description": "CLI local de inteligencia de repositorios + servidor MCP compartiendo el mismo core",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "bundle:cli": "npm run build && node scripts/bundle-cli.mjs",
+    "lint": "eslint .",
+    "test": "npm run build && jest",
+    "benchmark": "npm run build && node scripts/benchmark.js",
+    "smoke:pack": "bash ./scripts/smoke-packed-cli.sh",
+    "release:validate": "npm run bundle:cli && npm run lint && npm test && npm run benchmark && NPM_CONFIG_CACHE=/tmp/reporag-npm-cache npm pack --dry-run ./packages/cli"
+  },
+  "keywords": [
+    "code-intelligence",
+    "cli",
+    "mcp",
+    "rag"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^25.4.0",
+    "esbuild": "^0.27.3",
+    "eslint": "^10.0.3",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "fast-glob": "^3.3.3",
+    "zod": "^4.3.6"
+  }
+}

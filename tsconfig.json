@@ -1,0 +1,24 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/shared" },
+    { "path": "./packages/adapters" },
+    { "path": "./packages/domain" },
+    { "path": "./packages/app" },
+    { "path": "./packages/cli" },
+    { "path": "./packages/mcp-server" }
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es2020",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node10"
+  }
+}

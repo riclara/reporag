@@ -1,0 +1,34 @@
+.reporag/
+
+# reporag init local client configs
+.codex/config.toml
+.codex/skills/reporag-mcp-usage/
+.mcp.json
+.claude/settings.local.json
+.claude/settings.json
+.gemini/settings.json
+
+# dependencies
+node_modules/
+
+# build outputs
+dist/
+bundle/
+coverage/
+*.tsbuildinfo
+*.tgz
+
+# stray compiled artifacts inside TypeScript source trees
+packages/*/src/**/*.js
+packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.d.ts.map
+
+# caches and logs
+.eslintcache
+*.log
+
+# editor and OS noise
+.DS_Store
+.idea/
+.vscode/

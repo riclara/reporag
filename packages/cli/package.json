@@ -1,0 +1,39 @@
+{
+  "name": "reporag",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Local repository intelligence CLI with MCP server support",
+  "files": [
+    "bundle",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -b"
+  },
+  "bin": {
+    "reporag": "bundle/reporag.cjs",
+    "rr": "bundle/reporag.cjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "fast-glob": "^3.3.3",
+    "typescript": "^5.9.3",
+    "zod": "^4.3.6"
+  },
+  "keywords": [
+    "cli",
+    "mcp",
+    "rag",
+    "code-intelligence",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@reporag/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared config, schemas and types for reporag packages",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -b"
+  },
+  "keywords": [
+    "mcp",
+    "schemas",
+    "types"
+  ],
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

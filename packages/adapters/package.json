@@ -1,0 +1,35 @@
+{
+  "name": "@reporag/adapters",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Storage, parser and embedding adapters for reporag",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -b"
+  },
+  "keywords": [
+    "sqlite",
+    "typescript",
+    "embeddings"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}
