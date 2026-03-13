@@ -5,6 +5,8 @@ import path from "node:path";
 
 import { CodeIntelService, runMcpServer } from "@reporag/app";
 
+import { checkForUpdate, formatUpdateMessage } from "./update-check";
+
 const CLI_PACKAGE_JSON_PATH = path.resolve(__dirname, "..", "package.json");
 
 function getRepoRoot(): string {
@@ -311,13 +313,14 @@ function printDoctorResult() {
 
 async function main() {
   const [, , command, subcommand] = process.argv;
+  const currentVersion = getCliVersion();
 
   switch (command) {
     case "--version":
     case "-v":
     case "version":
       // eslint-disable-next-line no-console
-      console.log(getCliVersion());
+      console.log(currentVersion);
       break;
     case "init":
       printInitResult();
@@ -380,6 +383,12 @@ async function main() {
       // eslint-disable-next-line no-console
       console.log("  reporag --version");
       process.exitCode = 1;
+  }
+
+  const update = await checkForUpdate(currentVersion);
+  if (update) {
+    // eslint-disable-next-line no-console
+    console.error(formatUpdateMessage(update));
   }
 }
 
