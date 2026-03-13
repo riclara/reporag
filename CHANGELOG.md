@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/riclara/reporag/compare/reporag-v0.2.0...reporag-v0.3.0) (2026-03-13)
+
+
+### Features
+
+* **cli:** add version flag ([#6](https://github.com/riclara/reporag/issues/6)) ([9e80b58](https://github.com/riclara/reporag/commit/9e80b5869f340cf13ac3c44398f896de8c7fc6d4))
+
 ## [0.2.0](https://github.com/riclara/reporag/compare/reporag-v0.1.0...reporag-v0.2.0) (2026-03-13)
 
 

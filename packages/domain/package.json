@@ -1,6 +1,6 @@
 {
   "name": "@reporag/domain",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Core repository indexing and retrieval domain for reporag",
   "main": "dist/index.js",
@@ -19,8 +19,8 @@
     "build": "tsc -b"
   },
   "dependencies": {
-    "@reporag/adapters": "0.2.0",
-    "@reporag/shared": "0.2.0",
+    "@reporag/adapters": "0.3.0",
+    "@reporag/shared": "0.3.0",
     "fast-glob": "^3.3.3"
   },
   "keywords": [
