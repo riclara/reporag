@@ -1,0 +1,63 @@
+name: publish
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    env:
+      NPM_CONFIG_CACHE: /tmp/reporag-npm-cache
+    steps:
+      - name: Check out tagged release
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Ensure npm trusted publishing requirements
+        run: npm install --global npm@11.5.1
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve published version
+        id: release_version
+        run: echo "value=$(node -p \"require('./packages/cli/package.json').version\")" >> "$GITHUB_OUTPUT"
+
+      - name: Skip publish when the version already exists
+        id: npm_status
+        env:
+          RELEASE_VERSION: ${{ steps.release_version.outputs.value }}
+        run: |
+          if npm view "reporag@$RELEASE_VERSION" version --json >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "reporag@$RELEASE_VERSION is already available on npm. Skipping publish."
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate release readiness
+        if: ${{ steps.npm_status.outputs.published != 'true' }}
+        run: npm run release:validate
+
+      - name: Run packed tarball smoke test
+        if: ${{ steps.npm_status.outputs.published != 'true' }}
+        run: npm run smoke:pack
+
+      - name: Publish reporag to npm
+        if: ${{ steps.npm_status.outputs.published != 'true' }}
+        working-directory: packages/cli
+        run: npm publish

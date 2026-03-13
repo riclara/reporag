@@ -4,6 +4,8 @@ import { z } from "zod";
 
 import { CodeIntelService } from "./codeintel-service";
 
+const MCP_SERVER_VERSION = "0.1.0"; // x-release-please-version
+
 function formatTextBlock(text: string): Array<{ type: "text"; text: string }> {
   return [{ type: "text", text }];
 }
@@ -39,7 +41,7 @@ function formatSearchText(
 function createMcpServer(repoRoot: string): McpServer {
   const server = new McpServer({
     name: "reporag",
-    version: "0.1.0",
+    version: MCP_SERVER_VERSION,
   });
 
   server.registerTool(

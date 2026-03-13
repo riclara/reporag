@@ -3,6 +3,14 @@
   "private": true,
   "version": "0.1.0",
   "description": "CLI local de inteligencia de repositorios + servidor MCP compartiendo el mismo core",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riclara/reporag.git"
+  },
+  "bugs": {
+    "url": "https://github.com/riclara/reporag/issues"
+  },
+  "homepage": "https://github.com/riclara/reporag#readme",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -16,7 +24,9 @@
     "test": "npm run build && jest",
     "benchmark": "npm run build && node scripts/benchmark.js",
     "smoke:pack": "bash ./scripts/smoke-packed-cli.sh",
-    "release:validate": "npm run bundle:cli && npm run lint && npm test && npm run benchmark && NPM_CONFIG_CACHE=/tmp/reporag-npm-cache npm pack --dry-run ./packages/cli"
+    "release:sync": "node scripts/release-sync.mjs",
+    "release:verify-sync": "node scripts/release-sync.mjs --check",
+    "release:validate": "npm run release:verify-sync && npm run bundle:cli && npm run lint && npm test && npm run benchmark && NPM_CONFIG_CACHE=/tmp/reporag-npm-cache npm pack --dry-run ./packages/cli"
   },
   "keywords": [
     "code-intelligence",
