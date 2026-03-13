@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { CodeIntelService } from "./codeintel-service";
 
-const MCP_SERVER_VERSION = "0.3.0"; // x-release-please-version
+const MCP_SERVER_VERSION = "0.4.0"; // x-release-please-version
 
 function formatTextBlock(text: string): Array<{ type: "text"; text: string }> {
   return [{ type: "text", text }];
