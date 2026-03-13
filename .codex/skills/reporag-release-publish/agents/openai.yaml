@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reporag Release Publish"
+  short_description: "Versioning, releases, and npm publish"
+  default_prompt: "Use $reporag-release-publish to handle version bumps, release PRs, npm publishing, or release recovery in this repo."
