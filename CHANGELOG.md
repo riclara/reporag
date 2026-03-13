@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/riclara/reporag/compare/reporag-v0.3.0...reporag-v0.4.0) (2026-03-13)
+
+
+### Features
+
+* **cli:** notify about newer npm releases ([#8](https://github.com/riclara/reporag/issues/8)) ([0325574](https://github.com/riclara/reporag/commit/0325574f47bbe5d5edec06893ebb6643a2795929))
+
 ## [0.3.0](https://github.com/riclara/reporag/compare/reporag-v0.2.0...reporag-v0.3.0) (2026-03-13)
 
 
