@@ -23,7 +23,7 @@ describe("update check helpers", () => {
     process.env = { ...originalEnv };
     tempHome = fs.mkdtempSync(path.join(os.tmpdir(), "reporag-update-check-"));
     process.env.HOME = tempHome;
-    delete process.env.XDG_CACHE_HOME;
+    process.env.XDG_CACHE_HOME = path.join(tempHome, ".cache");
     delete process.env.REPORAG_DISABLE_UPDATE_CHECK;
     delete process.env.CI;
   });
