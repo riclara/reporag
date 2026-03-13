@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "private": false,
   "description": "Local repository intelligence CLI with MCP server support",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riclara/reporag.git"
+  },
+  "bugs": {
+    "url": "https://github.com/riclara/reporag/issues"
+  },
+  "homepage": "https://github.com/riclara/reporag#readme",
   "files": [
     "bundle",
     "README.md"
