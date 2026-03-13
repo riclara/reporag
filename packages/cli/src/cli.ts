@@ -1,14 +1,25 @@
 #!/usr/bin/env node
 
+import fs from "node:fs";
 import path from "node:path";
 
 import { CodeIntelService, runMcpServer } from "@reporag/app";
+
+const CLI_PACKAGE_JSON_PATH = path.resolve(__dirname, "..", "package.json");
 
 function getRepoRoot(): string {
   const envRepoRoot = process.env.REPORAG_REPO_ROOT?.trim();
   return envRepoRoot && envRepoRoot.length > 0
     ? path.resolve(envRepoRoot)
     : process.cwd();
+}
+
+function getCliVersion(): string {
+  const packageJson = JSON.parse(
+    fs.readFileSync(CLI_PACKAGE_JSON_PATH, "utf8"),
+  ) as { version?: string };
+
+  return packageJson.version ?? "0.0.0";
 }
 
 function printInitResult() {
@@ -302,6 +313,12 @@ async function main() {
   const [, , command, subcommand] = process.argv;
 
   switch (command) {
+    case "--version":
+    case "-v":
+    case "version":
+      // eslint-disable-next-line no-console
+      console.log(getCliVersion());
+      break;
     case "init":
       printInitResult();
       break;
@@ -360,6 +377,8 @@ async function main() {
       console.log("  reporag doctor");
       // eslint-disable-next-line no-console
       console.log("  reporag mcp serve");
+      // eslint-disable-next-line no-console
+      console.log("  reporag --version");
       process.exitCode = 1;
   }
 }
