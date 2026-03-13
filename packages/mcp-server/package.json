@@ -1,6 +1,6 @@
 {
   "name": "@reporag/mcp-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Standalone MCP server entrypoint for reporag",
   "main": "dist/index.js",
@@ -19,8 +19,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@reporag/app": "0.1.0",
-    "@reporag/shared": "0.1.0"
+    "@reporag/app": "0.2.0",
+    "@reporag/shared": "0.2.0"
   },
   "devDependencies": {},
   "keywords": [
