@@ -21,6 +21,10 @@ describe("CLI version output", () => {
     const output = execFileSync(process.execPath, [cliEntry, "--version"], {
       cwd: repoRoot,
       encoding: "utf8",
+      env: {
+        ...process.env,
+        REPORAG_DISABLE_UPDATE_CHECK: "1",
+      },
     });
 
     expect(output.trim()).toBe(packageJson.version);
