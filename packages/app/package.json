@@ -1,6 +1,6 @@
 {
   "name": "@reporag/app",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Shared application services for reporag CLI and MCP transports",
   "main": "dist/index.js",
@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",
-    "@reporag/domain": "0.2.0",
-    "@reporag/shared": "0.2.0"
+    "@reporag/domain": "0.3.0",
+    "@reporag/shared": "0.3.0"
   },
   "keywords": [
     "mcp",
