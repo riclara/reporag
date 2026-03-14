@@ -27,6 +27,8 @@ Documentation:
 
 - [English docs](docs/README.md)
 - [Documentacion en espanol](docs/README.es.md)
+- [Blog post in English](https://ricardolara.dev/blog/why-i-built-reporag/)
+- [Blog post in Spanish](https://ricardolara.dev/es/blog/por-que-construi-reporag/)
 
 ## Why it exists
 
