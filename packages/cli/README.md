@@ -1,5 +1,7 @@
 # reporag
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/riclara/reporag)
+
 Local repository intelligence CLI with MCP support.
 
 ## Install
