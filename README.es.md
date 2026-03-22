@@ -1,5 +1,7 @@
 [English](README.md) | Espanol
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/riclara/reporag)
+
 # reporag
 
 `reporag` es un CLI local de inteligencia de repositorios con servidor MCP

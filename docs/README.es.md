@@ -1,5 +1,7 @@
 [English](README.md) | Espanol
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/riclara/reporag)
+
 # Documentacion
 
 Este directorio mantiene la documentacion del repositorio en ambos idiomas
