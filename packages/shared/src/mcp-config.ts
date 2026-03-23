@@ -2,6 +2,8 @@ import path from "node:path";
 
 export const REPORAG_MCP_SERVER_NAME = "reporag";
 export const LEGACY_REPORAG_MCP_SERVER_NAMES = ["repository_rag"] as const;
+export const CODEX_MCP_BLOCK_START = `# BEGIN reporag managed ${REPORAG_MCP_SERVER_NAME} MCP`;
+export const CODEX_MCP_BLOCK_END = `# END reporag managed ${REPORAG_MCP_SERVER_NAME} MCP`;
 
 export const PROJECT_CODEX_CONFIG_RELATIVE_PATH = path.join(".codex", "config.toml");
 export const PROJECT_CLAUDE_MCP_RELATIVE_PATH = ".mcp.json";
@@ -29,6 +31,10 @@ export type McpCommandConfig = {
   env?: Record<string, string>;
 };
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+}
+
 function omitManagedMcpServerNames(
   servers: Record<string, unknown> | undefined,
 ): Record<string, unknown> {
@@ -44,7 +50,7 @@ function omitManagedMcpServerNames(
 
 export function buildCodexMcpConfig(config: McpCommandConfig): string {
   const lines = [
-    `# BEGIN reporag managed ${REPORAG_MCP_SERVER_NAME} MCP`,
+    CODEX_MCP_BLOCK_START,
     `[mcp_servers.${REPORAG_MCP_SERVER_NAME}]`,
     `command = ${JSON.stringify(config.command)}`,
     `args    = ${JSON.stringify(config.args)}`,
@@ -55,9 +61,42 @@ export function buildCodexMcpConfig(config: McpCommandConfig): string {
     lines.push(`cwd     = ${JSON.stringify(path.resolve(config.cwd))}`);
   }
 
-  lines.push(`# END reporag managed ${REPORAG_MCP_SERVER_NAME} MCP`, "");
+  if (config.env && Object.keys(config.env).length > 0) {
+    lines.push("", `[mcp_servers.${REPORAG_MCP_SERVER_NAME}.env]`);
+
+    const envEntries = Object.entries(config.env).sort(([left], [right]) =>
+      left.localeCompare(right),
+    );
+    for (const [key, value] of envEntries) {
+      lines.push(`${key} = ${JSON.stringify(value)}`);
+    }
+  }
+
+  lines.push(CODEX_MCP_BLOCK_END, "");
 
   return lines.join("\n");
+}
+
+export function upsertCodexMcpConfig(
+  current: string,
+  config: McpCommandConfig,
+): string {
+  const normalized = current.replace(/\r\n/g, "\n");
+  const managedBlock = buildCodexMcpConfig(config).trimEnd();
+  const blockPattern = new RegExp(
+    `${escapeRegExp(CODEX_MCP_BLOCK_START)}[\\s\\S]*?${escapeRegExp(CODEX_MCP_BLOCK_END)}`,
+    "u",
+  );
+
+  if (blockPattern.test(normalized)) {
+    return `${normalized.replace(blockPattern, managedBlock).trimEnd()}\n`;
+  }
+
+  if (normalized.trim().length === 0) {
+    return `${managedBlock}\n`;
+  }
+
+  return `${normalized.trimEnd()}\n\n${managedBlock}\n`;
 }
 
 export function buildClaudeMcpConfig(config: McpCommandConfig): Record<string, unknown> {

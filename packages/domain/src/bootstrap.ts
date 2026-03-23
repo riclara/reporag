@@ -4,8 +4,8 @@ import path from "node:path";
 import {
   buildClaudeMcpConfig,
   buildClaudeSettingsConfig,
-  buildCodexMcpConfig,
   buildGeminiSettingsConfig,
+  upsertCodexMcpConfig,
   DEFAULT_REPORAG_CONFIG,
   REPORAG_MCP_SERVER_NAME,
   type InitResult,
@@ -408,9 +408,16 @@ function ensureMcpClientConfigs(repoRoot: string, cliEntryPath?: string): void {
   );
   const geminiSettingsPath = path.join(repoRoot, ".gemini", "settings.json");
   const mcpCommand = resolveMcpCommandConfig(repoRoot, cliEntryPath);
+  const existingCodexConfig = fs.existsSync(codexPath)
+    ? fs.readFileSync(codexPath, "utf8")
+    : "";
 
   fs.mkdirSync(path.dirname(codexPath), { recursive: true });
-  fs.writeFileSync(codexPath, buildCodexMcpConfig(mcpCommand), "utf8");
+  fs.writeFileSync(
+    codexPath,
+    upsertCodexMcpConfig(existingCodexConfig, mcpCommand),
+    "utf8",
+  );
   writeJsonFile(claudeMcpPath, buildClaudeMcpConfig(mcpCommand));
   writeJsonFile(claudeSettingsPath, buildClaudeSettingsConfig());
   writeJsonFile(claudeSharedSettingsPath, buildClaudeSettingsConfig());
