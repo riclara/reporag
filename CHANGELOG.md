@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/riclara/reporag/compare/reporag-v0.5.0...reporag-v0.5.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* **init:** preserve existing Codex config ([#14](https://github.com/riclara/reporag/issues/14)) ([3a098f5](https://github.com/riclara/reporag/commit/3a098f5d5612f3b2370055588b3490ac6330c146))
+
 ## [0.5.0](https://github.com/riclara/reporag/compare/reporag-v0.4.0...reporag-v0.5.0) (2026-03-13)
 
 
