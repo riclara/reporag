@@ -1,6 +1,6 @@
 {
   "name": "@reporag/adapters",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "description": "Storage, parser and embedding adapters for reporag",
   "main": "dist/index.js",

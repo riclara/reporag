@@ -1,7 +1,7 @@
 {
   "name": "reporag",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "CLI local de inteligencia de repositorios + servidor MCP compartiendo el mismo core",
   "repository": {
     "type": "git",
