@@ -89,7 +89,7 @@ export function upsertCodexMcpConfig(
   );
 
   if (blockPattern.test(normalized)) {
-    return `${normalized.replace(blockPattern, managedBlock).trimEnd()}\n`;
+    return `${normalized.replace(blockPattern, () => managedBlock).trimEnd()}\n`;
   }
 
   if (normalized.trim().length === 0) {

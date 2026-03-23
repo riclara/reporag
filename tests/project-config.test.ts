@@ -23,6 +23,22 @@ const CLAUDE_BLOCK_START =
   "<!-- BEGIN reporag managed Claude repository_rag guidance -->";
 const SKILL_SEGMENTS = [".codex", "skills", "reporag-mcp-usage", "SKILL.md"];
 const CLAUDE_GUIDANCE_SEGMENTS = [".claude", "reporag-mcp.md"];
+const { upsertCodexMcpConfig } = require(path.join(
+  process.cwd(),
+  "packages",
+  "shared",
+  "dist",
+)) as {
+  upsertCodexMcpConfig: (
+    current: string,
+    config: {
+      command: string;
+      args: string[];
+      cwd?: string;
+      env?: Record<string, string>;
+    },
+  ) => string;
+};
 
 function readRepoFile(root: string, ...segments: string[]): string {
   return fs.readFileSync(path.join(root, ...segments), "utf8");
@@ -309,6 +325,33 @@ describe("initRepository MCP client config", () => {
     expect(codexConfig).not.toContain('args = ["old.js"]');
     expect(codexConfig).toContain('[mcp_servers.reporag]');
     expect(codexConfig.match(/# BEGIN reporag managed reporag MCP/gu)).toHaveLength(1);
+  });
+
+  it("preserves dollar signs when replacing an existing managed Codex MCP block", () => {
+    const staleCodexConfig = [
+      'model = "gpt-5.3-codex"',
+      "",
+      "# BEGIN reporag managed reporag MCP",
+      "[mcp_servers.reporag]",
+      'command = "node"',
+      'args = ["old.js"]',
+      "# END reporag managed reporag MCP",
+      "",
+    ].join("\n");
+
+    const codexConfig = upsertCodexMcpConfig(staleCodexConfig, {
+      command: "/tmp/cash$$app/bin/node",
+      args: ["/tmp/$HOME/run-mcp-server.cjs"],
+      cwd: "/tmp/project$workspace",
+      env: {
+        MCP_TOKEN: "token$$value",
+      },
+    });
+
+    expect(codexConfig).toContain('command = "/tmp/cash$$app/bin/node"');
+    expect(codexConfig).toContain('args    = ["/tmp/$HOME/run-mcp-server.cjs"]');
+    expect(codexConfig).toContain(`cwd     = ${JSON.stringify("/tmp/project$workspace")}`);
+    expect(codexConfig).toContain('MCP_TOKEN = "token$$value"');
   });
 
   it("preserves existing CLAUDE.md content while appending the managed import block", () => {
