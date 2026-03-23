@@ -38,11 +38,13 @@ Read `docs/release-checklist.md` only when the user needs the full manual/bootst
 - `fix:` produces a patch release.
 - `feat:` produces a minor release.
 - With squash merge enabled, the PR title becomes the commit title on `main`, so PR titles must follow Conventional Commits.
+- Use the global `conventional-pr-title-release` skill for the cross-project rules around PR titles, squash merge, and Conventional Commit naming.
+- In `reporag`, the repository-specific semver mapping is still: `fix:` => patch, `feat:` => minor.
 - Do not hand-edit versions during normal releases unless the user explicitly asks for a manual repair or bootstrap-style publish.
 
 ## Standard workflow
 
-1. Ensure the feature/fix PR title follows Conventional Commits.
+1. Ensure the feature/fix PR title follows Conventional Commits before creating or updating the PR.
 2. Let `ci` pass.
 3. Merge into `main`.
 4. Wait for `release-please` to open or refresh the release PR.

@@ -23,6 +23,22 @@ const CLAUDE_BLOCK_START =
   "<!-- BEGIN reporag managed Claude repository_rag guidance -->";
 const SKILL_SEGMENTS = [".codex", "skills", "reporag-mcp-usage", "SKILL.md"];
 const CLAUDE_GUIDANCE_SEGMENTS = [".claude", "reporag-mcp.md"];
+const { upsertCodexMcpConfig } = require(path.join(
+  process.cwd(),
+  "packages",
+  "shared",
+  "dist",
+)) as {
+  upsertCodexMcpConfig: (
+    current: string,
+    config: {
+      command: string;
+      args: string[];
+      cwd?: string;
+      env?: Record<string, string>;
+    },
+  ) => string;
+};
 
 function readRepoFile(root: string, ...segments: string[]): string {
   return fs.readFileSync(path.join(root, ...segments), "utf8");
@@ -242,6 +258,100 @@ describe("initRepository MCP client config", () => {
     expect(agents.match(new RegExp(escapeForRegExp(MANAGED_BLOCK_START), "gu"))).toHaveLength(
       1,
     );
+  });
+
+  it("preserves existing Codex config while appending the managed MCP block", () => {
+    const existingCodexConfig = [
+      'model = "gpt-5.3-codex"',
+      'approval_policy = "on-request"',
+      "",
+      "[profiles.existing]",
+      'model = "gpt-5.4"',
+      "",
+    ].join("\n");
+    fs.mkdirSync(path.join(tempRepo, ".codex"), { recursive: true });
+    fs.writeFileSync(
+      path.join(tempRepo, ".codex", "config.toml"),
+      existingCodexConfig,
+      "utf8",
+    );
+
+    const result = initRepository(tempRepo, CLI_ENTRY);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    const codexConfig = readRepoFile(result.repoRoot, ".codex", "config.toml");
+
+    expect(codexConfig).toContain('model = "gpt-5.3-codex"');
+    expect(codexConfig).toContain('approval_policy = "on-request"');
+    expect(codexConfig).toContain("[profiles.existing]");
+    expect(codexConfig).toContain('[mcp_servers.reporag]');
+    expect(codexConfig.match(/# BEGIN reporag managed reporag MCP/gu)).toHaveLength(1);
+  });
+
+  it("updates an existing managed Codex MCP block without removing unrelated config", () => {
+    const staleCodexConfig = [
+      'model = "gpt-5.3-codex"',
+      "",
+      "# BEGIN reporag managed reporag MCP",
+      "[mcp_servers.reporag]",
+      'command = "node"',
+      'args = ["old.js"]',
+      "# END reporag managed reporag MCP",
+      "",
+      "[profiles.existing]",
+      'model = "gpt-5.4"',
+      "",
+    ].join("\n");
+    fs.mkdirSync(path.join(tempRepo, ".codex"), { recursive: true });
+    fs.writeFileSync(
+      path.join(tempRepo, ".codex", "config.toml"),
+      staleCodexConfig,
+      "utf8",
+    );
+
+    const result = initRepository(tempRepo, CLI_ENTRY);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+
+    const codexConfig = readRepoFile(result.repoRoot, ".codex", "config.toml");
+
+    expect(codexConfig).toContain('model = "gpt-5.3-codex"');
+    expect(codexConfig).toContain("[profiles.existing]");
+    expect(codexConfig).not.toContain('args = ["old.js"]');
+    expect(codexConfig).toContain('[mcp_servers.reporag]');
+    expect(codexConfig.match(/# BEGIN reporag managed reporag MCP/gu)).toHaveLength(1);
+  });
+
+  it("preserves dollar signs when replacing an existing managed Codex MCP block", () => {
+    const staleCodexConfig = [
+      'model = "gpt-5.3-codex"',
+      "",
+      "# BEGIN reporag managed reporag MCP",
+      "[mcp_servers.reporag]",
+      'command = "node"',
+      'args = ["old.js"]',
+      "# END reporag managed reporag MCP",
+      "",
+    ].join("\n");
+
+    const codexConfig = upsertCodexMcpConfig(staleCodexConfig, {
+      command: "/tmp/cash$$app/bin/node",
+      args: ["/tmp/$HOME/run-mcp-server.cjs"],
+      cwd: "/tmp/project$workspace",
+      env: {
+        MCP_TOKEN: "token$$value",
+      },
+    });
+
+    expect(codexConfig).toContain('command = "/tmp/cash$$app/bin/node"');
+    expect(codexConfig).toContain('args    = ["/tmp/$HOME/run-mcp-server.cjs"]');
+    expect(codexConfig).toContain(`cwd     = ${JSON.stringify("/tmp/project$workspace")}`);
+    expect(codexConfig).toContain('MCP_TOKEN = "token$$value"');
   });
 
   it("preserves existing CLAUDE.md content while appending the managed import block", () => {

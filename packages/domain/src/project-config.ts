@@ -4,7 +4,6 @@ import path from "node:path";
 import {
   buildClaudeMcpConfig,
   buildClaudeSettingsConfig,
-  buildCodexMcpConfig,
   buildGeminiSettingsConfig,
   type McpCommandConfig,
   PROJECT_CLAUDE_MCP_RELATIVE_PATH,
@@ -12,6 +11,7 @@ import {
   PROJECT_CODEX_CONFIG_RELATIVE_PATH,
   PROJECT_GEMINI_SETTINGS_RELATIVE_PATH,
   PROJECT_MCP_WRAPPER_RELATIVE_PATH,
+  upsertCodexMcpConfig,
 } from "@reporag/shared";
 
 type WriteMode = "created" | "updated" | "unchanged";
@@ -129,7 +129,13 @@ export function writeProjectMcpClientConfigs(targetRoot: string): {
   const claudeSettingsPath = path.join(root, PROJECT_CLAUDE_SETTINGS_RELATIVE_PATH);
   const geminiSettingsPath = path.join(root, PROJECT_GEMINI_SETTINGS_RELATIVE_PATH);
 
-  const codex = writeTextFile(codexPath, buildCodexMcpConfig(commandConfig));
+  const existingCodexConfig = fs.existsSync(codexPath)
+    ? fs.readFileSync(codexPath, "utf8")
+    : "";
+  const codex = writeTextFile(
+    codexPath,
+    upsertCodexMcpConfig(existingCodexConfig, commandConfig),
+  );
   const claudeMcp = writeJsonFile(claudeMcpPath, buildClaudeMcpConfig(commandConfig));
 
   const existingClaudeSettings = readOptionalJson(claudeSettingsPath);
